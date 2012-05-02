@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Demand BrowserID{%endblock%}</title>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+    </head>
+
+    <body>
+        <section>
+            {% block content %}{% endblock %}
+        </section>
+
+        <aside>
+            {% if browserid %}
+                Hi, {{ browserid }}. <a href="/browserid/logout/">Logout</a>
+
+                <form action="{% url demand %}" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="site" />
+                    <input type="submit" value="Demand" />
+                </form>
+            {% else %}
+                <a href="#" id="browserid" title="Sign-in with BrowserID">
+                    <img src="https://browserid.org/i/sign_in_red.png" alt="Sign in">
+                </a>
+                <form action="{% url verify %}" method="POST">
+                    {% csrf_token %}
+                    {{ browserid_form.as_p }}
+                </form>
+
+                {{ browserid_form.media }}
+            {% endif %}
+
+            <p>
+                This website is an attempt to give users a chance to voice
+                their opinion on which sites they'd like to see support
+                BrowserID.
+            </p>
+        </aside>
+    </body>
+</html>

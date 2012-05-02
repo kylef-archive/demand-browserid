@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>{{ site.name }} <small><a href="http://{{ site.domain }}/">visit</a></small></h2>
+
+    <ul>
+      {% if browserid %}
+        <li><a href="{{ site.get_vote_url }}">Demand BrowserID</a></li>
+      {% endif %}
+        <li>Status: {% if site.support_browserid %}Supports BrowserID{% else %}Does not support BrowserID{% endif %}</li>
+        <li>{{ site.votes }} people want {{ site.name }} to support BrowserID.</li>
+    </ul>
+
+{% endblock %}
+
