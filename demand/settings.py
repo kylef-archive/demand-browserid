@@ -84,7 +84,8 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'c_y=ftop6b%=f2t!7v0$pn2isa&amp;lswop^*)bpqvc^-fldab^-)'
+SECRET_KEY = os.environ.get('SECRET_KEY',
+    'c_y=ftop6b%=f2t!7v0$pn2isa&amp;lswop^*)bpqvc^-fldab^-)')
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
