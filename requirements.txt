@@ -1,4 +1,4 @@
 Django==1.4
-PyBrowserID==0.5.0
+-e git+https://github.com/kylef/PyBrowserID.git@f77c4a52c23d0de01c500fa7aaedcfe9c3b498eb#egg=PyBrowserID-dev
 distribute==0.6.24
 psycopg2==2.4.5
