@@ -1,18 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Sites</h2>
+    <h2 class="page-header">Top Sites</h2>
 
-    <ul>
+    <ol>
       {% for site in site_list %}
         <li>
-            <a href="{{ site.get_absolute_url }}">{{ site }}</a> ({{ site.vote_count }} votes)
+            <a href="{{ site.get_absolute_url }}">{{ site }}</a>
+
+            {% if site.support_browserid %}
+              <span class="label label-success">Success</span>
+            {% endif %}
+        
+        
+            ({{ site.vote_count }} votes)
 
             {% if browserid %}
-                (<a href="{{ site.get_vote_url }}">vote</a>)
+                <a href="{{ site.get_vote_url }}" class="btn btn-mini">vote</a>
             {% endif %}
         </li>
       {% endfor %}
-    </ul>
+    </ol>
 {% endblock %}
 

@@ -3,7 +3,7 @@ from django.db import models
 class SiteManager(models.Manager):
     def top(self):
         return self.get_query_set().annotate(
-            vote_count=models.Count('vote')).order_by('-vote')
+            vote_count=models.Count('vote')).order_by('-vote_count')
 
     def new(self):
         return self.get_query_set().order_by('-date')[:10]
@@ -18,7 +18,7 @@ class Site(models.Model):
     objects = SiteManager()
 
     def __unicode__(self):
-        return self.domain
+        return self.name
 
     def save(self, *args, **kwargs):
         if not self.name:

@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.views.generic.edit import BaseFormView
 from django.views.generic import RedirectView
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
 
 from browserid import verify
 from demandapp.forms import BrowserIDForm
@@ -18,9 +19,12 @@ class Verify(BaseFormView):
         return '*'
 
     def login_success(self):
+        messages.success(self.request, 'Welcome %s' %
+                self.request.session['browserid'])
         return redirect('/')
 
     def login_failure(self):
+        messages.error(self.request, 'Login failed')
         return redirect('/')
 
     def form_valid(self, form):
@@ -50,6 +54,9 @@ class Logout(RedirectView):
         return super(Logout, self).get(request, *args, **kwargs)
 
 
+class DemandException(Exception): pass
+
+
 class DemandView(RedirectView):
     def get_redirect_url(self, **kwargs):
         if self.site:
@@ -62,28 +69,35 @@ class DemandView(RedirectView):
         # we silently fail on errors
 
         if not request.browserid:
-            return  # we ain't logged in
+            messages.error(request, 'You are not logged in')
+            return
 
         o = urlparse(domain)
-        domain = re.sub(r'^www\.', '', str(o.hostname))
+        if o.hostname:
+            domain = o.hostname
+        else:
+            domain = o.path
 
-        if not domain:
+        domain = re.sub(r'^www\.', '', str(domain))
+
+        if not (domain and '.' in domain):
+            messages.error(request, "The domain '%s' does not look valid" % domain)
             return
-        if '.' not in domain:
-            return  # if it looks like a domain, then we will allow it
 
         try:
             self.site = Site.objects.filter(domain=domain).get()
         except ObjectDoesNotExist:
             self.site = Site(domain=domain)
             self.site.save()
+            messages.success(request, 'You have voted for %s' % self.site)
 
         vote = Vote(voter=unicode(request.browserid), website=self.site)
 
         try:
             vote.save()
         except:
-           pass
+            messages.error(request, 'You have already voted for this site.')
+            return
 
     def get(self, request, site):
         self.handle_site(request, site)

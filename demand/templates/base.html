@@ -3,39 +3,81 @@
     <head>
         <title>{% block title %}Demand BrowserID{%endblock%}</title>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+        <link href="{{ STATIC_URL }}/css/bootstrap.min.css" rel="stylesheet" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
 
-    <body>
-        <section>
-            {% block content %}{% endblock %}
+    <body style="padding-top: 45px;">
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a href="/" class="brand">Demand BrowserID</a>
+
+                  {% if browserid %}
+                    <ul class="nav pull-right">
+                        <li><a href="/browserid/logout/">Sign out</a></li>
+                    </ul>
+                  {% else %}
+                    <a href="#" id="browserid" title="Sign-in with BrowserID" class="pull-right" style="padding-top: 8px;">
+                        <img src="https://browserid.org/i/sign_in_blue.png" alt="Sign in">
+                    </a>
+
+                    <form action="{% url verify %}" method="POST">
+                        {% csrf_token %}
+                        {{ browserid_form.as_p }}
+                    </form>
+
+                    {{ browserid_form.media }}
+                  {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <section class="container">
+          {% if messages %}
+              {% for message in messages %}
+                <div class="alert-{{ message.tags }} alert" style="margin-top: 20px;">{{ message }}</div>
+              {% endfor %}
+          {% endif %}
+
+            <div class="row">
+                <div class="span8">
+                    {% block content %}{% endblock %}
+                </div>
+
+                <div class="span4" style="padding-top: 20px;">
+                  {% if browserid %}
+                    <form action="{% url demand %}" method="POST" class="form-inline">
+                        {% csrf_token %}
+                        <input type="text" name="site" placeholder="Site" />
+                        <input type="submit" value="Demand" class="btn btn-primary" />
+                    </form>
+                  {% endif %}
+
+                    <p>
+                        This website is an attempt to give users a chance to voice
+                        their opinion on which sites they'd like to see support
+                        BrowserID.
+                    </p>
+
+                    <h3>Latest Sites</h3>
+                    {% load sites %}
+                    {% get_latest_sites as latest_sites %}
+                    <ul>
+                      {% for site in latest_sites %}
+                        <li><a href="{{ site.get_absolute_url }}">{{ site }}</a></li>
+                      {% endfor %}
+                    </ul>
+
+                    <h3>Latest Votes</h3>
+                    {% get_latest_votes as latest_votes %}
+                    <ul>
+                      {% for vote in latest_votes %}
+                        <li><a href="{{ vote.website.get_absolute_url }}">{{ vote.website }}</a></li>
+                      {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </section>
-
-        <aside>
-            {% if browserid %}
-                Hi, {{ browserid }}. <a href="/browserid/logout/">Logout</a>
-
-                <form action="{% url demand %}" method="POST">
-                    {% csrf_token %}
-                    <input type="text" name="site" />
-                    <input type="submit" value="Demand" />
-                </form>
-            {% else %}
-                <a href="#" id="browserid" title="Sign-in with BrowserID">
-                    <img src="https://browserid.org/i/sign_in_red.png" alt="Sign in">
-                </a>
-                <form action="{% url verify %}" method="POST">
-                    {% csrf_token %}
-                    {{ browserid_form.as_p }}
-                </form>
-
-                {{ browserid_form.media }}
-            {% endif %}
-
-            <p>
-                This website is an attempt to give users a chance to voice
-                their opinion on which sites they'd like to see support
-                BrowserID.
-            </p>
-        </aside>
     </body>
 </html>

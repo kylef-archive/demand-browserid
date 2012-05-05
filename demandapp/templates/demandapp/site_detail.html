@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>{{ site.name }} <small><a href="http://{{ site.domain }}/">visit</a></small></h2>
+    <h2 class="page-header">{{ site }} <span class="badge">{{ site.votes }}</span><small><a href="http://{{ site.domain }}/">visit</a></small></h2>
 
     <ul>
       {% if browserid %}
@@ -10,6 +10,5 @@
         <li>Status: {% if site.support_browserid %}Supports BrowserID{% else %}Does not support BrowserID{% endif %}</li>
         <li>{{ site.votes }} people want {{ site.name }} to support BrowserID.</li>
     </ul>
-
 {% endblock %}
 
