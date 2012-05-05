@@ -3,7 +3,7 @@
 import os
 PROJECT_DIR = os.path.abspath(os.path.dirname(os.path.abspath(__file__)))
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -66,7 +66,7 @@ STATIC_ROOT = ''
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static/'
+STATIC_URL = 'http://dl.dropbox.com/u/2325654/bootstrap/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
