@@ -16,7 +16,7 @@ class Verify(BaseFormView):
     form_class = BrowserIDForm
 
     def get_audience(self):
-        return '*'
+        return 'https://demand-browserid.herokuapp.com'
 
     def login_success(self):
         messages.success(self.request, 'Welcome %s' %
