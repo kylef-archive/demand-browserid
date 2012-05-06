@@ -15,7 +15,7 @@
         
             ({{ site.vote_count }} votes)
 
-            {% if browserid %}
+            {% if browserid and not site.support_browserid %}
                 <a href="{{ site.get_vote_url }}" class="btn btn-mini">vote</a>
             {% endif %}
         </li>
