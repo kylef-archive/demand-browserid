@@ -10,5 +10,15 @@
         <li>Status: {% if site.support_browserid %}Supports BrowserID{% else %}Does not support BrowserID{% endif %}</li>
         <li>{{ site.votes }} people want {{ site.name }} to support BrowserID.</li>
     </ul>
+
+    <h3>Votes</h3>
+
+    <div style="padding-top: 10px;">
+      {% load gravatar %}
+      {% for vote in site.vote_set.all %}
+        <img src="{% gravatar vote.voter 50 %}" border="0" alt="" />
+      {% endfor %}
+    </div>
 {% endblock %}
+
 
