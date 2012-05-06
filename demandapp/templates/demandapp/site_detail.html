@@ -1,16 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2 class="page-header">{{ site }} <span class="badge" style="margin-right: 10px;">{{ site.votes }}</span><small><a href="http://{{ site.domain }}/">visit</a></small></h2>
+    <h2 class="page-header">
+        {{ site }} <small><a href="http://{{ site.domain }}/" rel="nofollow">visit</a></small>
+        <span class="badge" style="margin-right: 10px;">
+            {{ site.votes }}
+          {% ifequal site.votes 1 %}
+            vote
+          {% else %}
+            votes
+          {% endifequal %}
+        </span>
 
-    <ul>
-      {% if browserid %}
-        <li><a href="{{ site.get_vote_url }}">Demand BrowserID</a></li>
+      {% if site.support_browserid %}
+        <span class="label label-success pull-right">Supports BrowserID</span>
+      {% else %}
+        {% if browserid %}
+          <a href="#"class="btn btn-primary pull-right">Vote for {{ site }}</a>
+        {% endif %}
       {% endif %}
-        <li>Status: {% if site.support_browserid %}Supports BrowserID{% else %}Does not support BrowserID{% endif %}</li>
-        <li>{{ site.votes }} people want {{ site.name }} to support BrowserID.</li>
-    </ul>
+    </h2>
 
+  {% if site.vote_set.count %}
     <h3>Votes</h3>
 
     <div style="padding-top: 10px;">
@@ -19,6 +30,9 @@
         <img src="{% gravatar vote.voter 50 %}" border="0" alt="" />
       {% endfor %}
     </div>
+  {% else %}
+    <p>There are no votes for {{ site }}</p>
+  {% endif %}
 {% endblock %}
 
 
