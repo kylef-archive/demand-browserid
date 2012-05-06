@@ -3,3 +3,4 @@ Django==1.4
 distribute==0.6.24
 django-sslify==0.2
 psycopg2==2.4.5
+gunicorn==0.14.2
