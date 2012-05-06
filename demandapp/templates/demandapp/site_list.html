@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2 class="page-header">Top Sites{% if not browserid %} <small>Sign in to vote</small>{% endif %}</h2>
+    <h2 class="page-header">Top Sites{% if not browserid %} <small class="browserid">Sign in to vote</small>{% endif %}</h2>
 
     <ol>
       {% for site in site_list %}

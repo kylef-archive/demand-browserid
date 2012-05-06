@@ -17,6 +17,8 @@
       {% else %}
         {% if browserid %}
           <a href="#"class="btn btn-primary pull-right">Vote for {{ site }}</a>
+        {% else %}
+          <a href="#" class="btn pull-right browserid">Sign in to vote</a>
         {% endif %}
       {% endif %}
     </h2>
