@@ -6,6 +6,8 @@ def normalise_site(site):
 
     if o.hostname:
         domain = o.hostname
+    elif '/' in o.path:
+        domain = o.path.split('/')[0]
     else:
         domain = o.path
 
