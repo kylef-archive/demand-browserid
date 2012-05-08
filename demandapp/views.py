@@ -1,6 +1,3 @@
-from urlparse import urlparse
-import re
-
 from django.shortcuts import redirect
 from django.views.generic.edit import BaseFormView
 from django.views.generic import RedirectView
@@ -10,6 +7,7 @@ from django.contrib import messages
 from browserid import verify
 from demandapp.forms import BrowserIDForm
 from demandapp.models import Site, Vote
+from demandapp.utils import normalise_site
 
 
 class Verify(BaseFormView):
@@ -72,15 +70,8 @@ class DemandView(RedirectView):
             messages.error(request, 'You are not logged in')
             return
 
-        o = urlparse(domain)
-        if o.hostname:
-            domain = o.hostname
-        else:
-            domain = o.path
-
-        domain = re.sub(r'^www\.', '', str(domain))
-
-        if not (domain and '.' in domain):
+        domain = normalise_site(domain)
+        if not domain:
             messages.error(request, "The domain '%s' does not look valid" % domain)
             return
 
