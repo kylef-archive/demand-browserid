@@ -6,11 +6,11 @@ Replace this with more appropriate tests for your application.
 """
 
 from django.test import TestCase
-
+from demandapp.utils import normalise_site
 
 class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+    def test_normalise(self):
+        self.assertEqual(normalise_site('www.heroku.com'), 'heroku.com')
+        self.assertEqual(normalise_site('secure.gaug.es'), 'gaug.es')
+        self.assertEqual(normalise_site('get.gaug.es'), 'gaug.es')
+
